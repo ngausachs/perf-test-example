@@ -1,0 +1,53 @@
+# Azure Devops pipeline to build a mockup container invokable from webmethods.io flow services
+
+trigger:
+- main
+- increment*
+
+pool:
+  # Change the name according to your setup
+  name: YourAgentsVmssHere
+  vmImage: Canonical:0001-com-ubuntu-confidential-vm-focal:20_04-lts-gen2:latest
+
+jobs:
+
+- job: containerize
+  displayName: "Containerize"
+
+  steps:
+
+    # grant execution permissions to the repository scripts
+    # also pre-emptively start the OS update, sometimes it saves a bit of time
+    - script: |
+        nohup sudo apt-get -qq -y update &
+        find . -type f -name "*.sh" -exec chmod u+x "{}" \;
+      displayName: "Grant shell execution permissions"
+
+    # The job requires a secure file called build.secrets.sh, done following the provided example
+    - task: DownloadSecureFile@1
+      name: SecureInfo
+      displayName: 'Download secure information for images transport'
+      inputs: 
+        secureFile: 'cr.credentials.secret.sh'
+
+    - script: ./pipelines/azure-with-secure-files/scripts/01.assureJobVariables.sh
+      displayName: "Job Variables"
+
+    - script: ./pipelines/azure-with-secure-files/scripts/02.prepareAgentMachine.sh
+      displayName: "Prepare Agent"
+
+    - script: ./pipelines/azure-with-secure-files/scripts/03.supplementalTags.sh
+      displayName: "Azure tags"
+
+    - script: ./build/01.checkPrerequisites.sh
+      displayName: "Assure prerequisites"
+
+    - script: ./build/02.getArtifacts.sh
+      displayName: "Get artifacts"
+
+    - script: ./build/03.build.sh
+      displayName: "Build"
+
+    - script: ./build/04.logout.sh
+      displayName: "Logout"
+      condition: always()

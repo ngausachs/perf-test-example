@@ -1,0 +1,8 @@
+.env
+**/local/*
+*.bak
+cr.credentials.secret.sh
+*.log
+setEnv.bat
+nohup.out
+.vscode

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  msr-dev-01:
+    image: ${CONTAINER_REGISTRY_URL}/${CONTAINER_IMAGE_REPOSITORY}:${CONTAINER_IMAGE_TAG}
+    ports:
+      - ${HOST_PORT_PREFIX}55:5555
+    hostname: api-mockup-dev-01
+    volumes:
+      - ${HOST_MSR_LICENSE_FILE}:/tmp/license.xml
+      - ./application.properties:/tmp/application.properties
+      # Our Code
+      - ../../code/is-packages/SagServiceMockup/:${GUEST_IS_HOME}/packages/SagServiceMockup/
+      - ../../code/is-packages/SagServiceMockupLocalTest/:${GUEST_IS_HOME}/packages/SagServiceMockupLocalTest/
+      # "Imported", but editable library
+      - ${WX_IS_TEST_TOOLS_PACKAGE_HOME}:${GUEST_IS_HOME}/packages/WxIsTestTools
+      - ${WX_IS_TEST_TOOLS_PACKAGE_HOME}LocalTest:${GUEST_IS_HOME}/packages/WxIsTestToolsLocalTest
+    environment:
+      - SAG_IS_LICENSE_FILE=/tmp/license.xml
+      - SAG_IS_CONFIG_PROPERTIES=/tmp/application.properties

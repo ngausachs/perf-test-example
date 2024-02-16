@@ -1,0 +1,65 @@
+version: '3.8'
+
+volumes:
+  prometheus-data: {}
+  grafana-data: {}
+  influxdb-config: {}
+  influxdb-data: {}
+
+services:
+  msr-test-01:
+    image: ${CONTAINER_REGISTRY_URL}/${CONTAINER_IMAGE_REPOSITORY}:${CONTAINER_IMAGE_TAG}
+    ports:
+      - ${HOST_PORT_PREFIX}55:5555
+    volumes:
+      - ${HOST_MSR_LICENSE_FILE}:/tmp/license.xml
+      - ./application.properties:/tmp/application.properties
+    mem_reservation: 100m
+    mem_limit: 400m
+    cpus: 1
+    environment:
+      - SAG_IS_LICENSE_FILE=/tmp/license.xml
+      - SAG_IS_CONFIG_PROPERTIES=/tmp/application.properties
+      - JAVA_MIN_MEM=256m
+      - JAVA_MAX_MEM=256m
+      - IS_ADMIN_PWD
+  jmeter:
+    image: alpine/jmeter
+    #hostname: jmeter
+    volumes:
+      - ./scripts/jmeter:/mnt/scripts
+      - ./jmeterProject/genericGetTest-01.jmx:/tmp/suite.jmx
+    environment:
+      - IS_ADMIN_PWD
+      - MIN_USERS_NO
+      - USER_NO_INCREMENT
+      - MAX_USERS_NO
+      - API_HOST
+      - API_PORT
+      - API_URI
+      - API_PROTOCOL
+      - API_USER
+      - API_USER_PWD
+    entrypoint: /mnt/scripts/entrypoint.sh
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    depends_on:
+      - msr-test-01
+    ports:
+      - ${HOST_PORT_PREFIX}90:9090
+  grafana:
+    image: grafana/grafana-oss
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./local/grafana:/mnt/local
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    ports:
+      - ${HOST_PORT_PREFIX}30:3000
+    depends_on:
+      - msr-test-01
+      - prometheus

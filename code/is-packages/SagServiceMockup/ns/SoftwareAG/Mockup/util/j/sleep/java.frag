@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Values version="2.0">
+  <value name="name">sleep</value>
+  <value name="encodeutf8">true</value>
+  <value name="body">Ly8gcGlwZWxpbmUNCklEYXRhQ3Vyc29yIHBpcGVsaW5lQ3Vyc29yID0gcGlwZWxpbmUuZ2V0Q3Vy
+c29yKCk7DQoJU3RyaW5nCXNsZWVwTWlsbGlzID0gSURhdGFVdGlsLmdldFN0cmluZyggcGlwZWxp
+bmVDdXJzb3IsICJzbGVlcE1pbGxpcyIgKTsNCnBpcGVsaW5lQ3Vyc29yLmRlc3Ryb3koKTsNCg0K
+aWYgKCBudWxsICE9IHNsZWVwTWlsbGlzICYmICghICIiLmVxdWFscyhzbGVlcE1pbGxpcykpKQ0K
+CXRyeSB7DQoJCUxvbmcgbD1Mb25nLnBhcnNlTG9uZyhzbGVlcE1pbGxpcyk7DQoJCVRocmVhZC5z
+bGVlcChsKTsNCgl9IGNhdGNoIChJbnRlcnJ1cHRlZEV4Y2VwdGlvbiBlKSB7DQoJCXRocm93IG5l
+dyBTZXJ2aWNlRXhjZXB0aW9uKCJTbGVlcGluZyBiZWF1dHkgYXdha2VuZWQhIik7DQoJfSBjYXRj
+aCAoTnVtYmVyRm9ybWF0RXhjZXB0aW9uIG5mZSl7DQoJCXRocm93IG5ldyBTZXJ2aWNlRXhjZXB0
+aW9uKCJDYW5ub3Qgc2xlZXAgZm9yIGEgbm9uIG51bWJlciB2YWx1ZTogIiArIHNsZWVwTWlsbGlz
+KTsNCgl9</value>
+</Values>
